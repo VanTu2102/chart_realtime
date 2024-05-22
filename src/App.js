@@ -32,7 +32,7 @@ function App() {
         response.data.data.forEach((e)=>{
           env_humi.push({
             x: e.Time_real_Date,
-            y: e.Env_Humi
+            y: e.Env_Humi,
           })
         })
         setEnv_Humi_data(env_humi)
