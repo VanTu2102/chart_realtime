@@ -19,6 +19,7 @@ import Calendar from "./scenes/calendar/calendar";
 
 function App() {
   const [theme, colorMode] = useMode();
+  const [Env_Humi_data, setEnv_Humi_data] = useState(null);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,7 +28,14 @@ function App() {
       setIsLoading(true);
       try {
         const response = await axios.get('http://sanslab.ddns.net:5001/api/getdata');
-        console.log(response)
+        let env_humi = []
+        response.data.data.forEach((e)=>{
+          env_humi.push({
+            x: e.Time_real_Date,
+            y: e.Env_Humi
+          })
+        })
+        setEnv_Humi_data(env_humi)
         setData(response.data);
       } catch (error) {
         setError(error);
@@ -208,7 +216,11 @@ function App() {
         <CssBaseline />
         <div className="app">
           <main className="content">
-            <Line data={mockLineData}/>
+            <Line data={[{
+              id: "Env_Humi",
+              color: tokens("dark").greenAccent[500],
+              data: Env_Humi_data === null? [] : Env_Humi_data
+            }]}/>
             {/*<Routes>*/}
             {/*  <Route path="/" element={<Dashboard />} />*/}
             {/*  <Route path="/team" element={<Team />} />*/}
